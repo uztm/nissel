@@ -10,9 +10,9 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { id: 1, label: "Asosiy", path: "/" },
-  { id: 2, label: "Biz haqimizda", path: "/" },
+  { id: 2, label: "Biz haqimizda", path: "/#" },
   { id: 3, label: "Mahsulotlar", path: "/products" },
-  { id: 4, label: "Aloqa", path: "/" },
+  { id: 4, label: "Aloqa", path: "/#" },
 ];
 
 export default function Navbar() {
