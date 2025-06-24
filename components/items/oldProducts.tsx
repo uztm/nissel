@@ -204,13 +204,10 @@ export default function NewProduct({
             >
               <Share2 className="w-4 h-4" />
             </Button>
-            <Button
-              className="flex-1 bg-green-600 hover:bg-green-700"
-              disabled={!product.in_stock}
-            >
-              <ShoppingCart className="w-4 h-4 mr-2" />
-              Savatga
-            </Button>
+            <OrderModal
+              product={product}
+              classStyle="flex-1 bg-green-600 hover:bg-green-700"
+            />
           </div>
         </div>
 
