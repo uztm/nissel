@@ -1,4 +1,6 @@
+import { OrderModal } from "@/components/modal/contact";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 export default function Hero() {
@@ -31,10 +33,12 @@ export default function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 pt-2">
-          <Button className="bg-green-700 hover:bg-green-800 text-white">
-            Sotib oling
-          </Button>
-          <Button variant="outline">Aloqa</Button>
+          <Link href={"products"}>
+            <Button className="bg-green-700 hover:bg-green-800 text-white">
+              Sotib oling
+            </Button>
+          </Link>
+          <OrderModal />
         </div>
       </div>
 

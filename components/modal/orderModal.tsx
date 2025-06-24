@@ -41,9 +41,14 @@ type OrderModalProps = {
   product: Product;
   productId?: string;
   buttonText?: string;
+  classStyle?: string;
 };
 
-export function OrderModal({ product, buttonText }: OrderModalProps) {
+export function OrderModal({
+  product,
+  buttonText,
+  classStyle,
+}: OrderModalProps) {
   const [formData, setFormData] = useState({
     full_name: "",
     phone_number: "+998",
@@ -86,7 +91,9 @@ export function OrderModal({ product, buttonText }: OrderModalProps) {
       <DialogTrigger asChild>
         <Button
           disabled={!product.in_stock}
-          className="bg-green-600 hover:bg-green-700"
+          className={`${
+            classStyle ?? "bg-green-600 hover:bg-green-700"
+          } flex items-center`}
         >
           <ShoppingCart className="w-4 h-4 mr-2" />
           {buttonText || "Sotib olish"}

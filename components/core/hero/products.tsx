@@ -1,31 +1,25 @@
+import { crud } from "@/app/api/apiService";
+import NewProduct from "@/components/items/oldProducts";
 import Product from "@/components/items/product";
 import { Button } from "@/components/ui/button";
-import React from "react";
+import { Product as Tps } from "@/types/product";
+import React, { useEffect } from "react";
 
 export default function Products() {
-  const products = [
-    {
-      id: 1,
-      title: "Matcha May bilan Sencha 100g Uji (Yanoen)",
-      description:
-        "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-      image: "/assets/product.png",
-    },
-    {
-      id: 2,
-      title: "Matcha May bilan Sencha 100g Uji (Yanoen)",
-      description:
-        "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-      image: "/assets/product.png",
-    },
-    {
-      id: 3,
-      title: "Matcha May bilan Sencha 100g Uji (Yanoen)",
-      description:
-        "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-      image: "/assets/product.png",
-    },
-  ];
+  const [products, setProducts] = React.useState<Tps[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await crud.loadAll("products");
+        setProducts(response);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []); // <-- add this empty array here
 
   return (
     <div className="mt-10 ">
@@ -33,17 +27,12 @@ export default function Products() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
-          <Product key={product.id} product={product} />
+          <NewProduct key={product.id} product={product} />
         ))}
       </div>
 
       <div className="flex justify-center mt-10">
-        <Button
-          variant="outline"
-          className="border border-green-600 text-green-700 hover:bg-green-50 px-6 py-2 "
-        >
-          Barcha mahsulotlar
-        </Button>
+        <Button className="bg-green-500 px-6 py-2 ">Barcha mahsulotlar</Button>
       </div>
     </div>
   );

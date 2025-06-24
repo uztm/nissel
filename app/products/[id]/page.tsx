@@ -29,6 +29,7 @@ import ProductReviews from "@/components/items/product-reviews";
 import ProductSkeleton from "@/components/items/product-detail-skeleton";
 import { crud } from "@/app/api/apiService";
 import { Product } from "@/types/product";
+import { OrderModal } from "@/components/modal/orderModal";
 
 // Extended mock data with more details
 const allProducts = [
@@ -177,7 +178,6 @@ export default function ProductDetailPage() {
       }
     };
     fetchProduct();
-    
   }, [params.id]);
 
   if (isLoading) {
@@ -209,7 +209,8 @@ export default function ProductDetailPage() {
 
   const discountPercentage = product.original_price
     ? Math.round(
-        ((product.original_price - product.price) / product.original_price) * 100
+        ((product.original_price - product.price) / product.original_price) *
+          100
       )
     : 0;
 
@@ -241,9 +242,6 @@ export default function ProductDetailPage() {
       navigator.clipboard.writeText(window.location.href);
     }
   };
-
-
-
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -402,7 +400,7 @@ export default function ProductDetailPage() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
+              {/* <div className="flex flex-col sm:flex-row gap-4">
                 <Button
                   size="lg"
                   className="md:flex-1 bg-green-600 hover:bg-green-700 h-12"
@@ -412,6 +410,31 @@ export default function ProductDetailPage() {
                   <ShoppingCart className="w-5 h-5 mr-2" />
                   Savatga qo'shish
                 </Button>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => setIsFavorite(!isFavorite)}
+                  className="h-12"
+                >
+                  <Heart
+                    className={cn(
+                      "w-5 h-5",
+                      isFavorite && "fill-red-500 text-red-500"
+                    )}
+                  />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={handleShare}
+                  className="h-12"
+                >
+                  <Share2 className="w-5 h-5" />
+                </Button>
+              </div> */}
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <OrderModal classStyle="md:flex-1 bg-green-600 hover:bg-green-700 h-12" product={product} />
                 <Button
                   variant="outline"
                   size="lg"
