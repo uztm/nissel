@@ -14,7 +14,7 @@ export default function Hero() {
     <div className="bg-[#F2F7EC] overflow-hidden w-full rounded-2xl grid grid-cols-1 md:grid-cols-2 items-center">
       {/* Left Content */}
       <div className="p-6 md:p-10 space-y-6">
-        <h1 className="text-xl font-bold text-green-700">LOGO</h1>
+        <img src="/assets/logo.svg" className="w-12" alt="" />
 
         <h2 className="text-3xl md:text-4xl font-extrabold leading-snug text-gray-800">
           Premium Organik Matcha bilan kuningizni yuqori darajaga olib chiqing

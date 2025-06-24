@@ -1,19 +1,34 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useParams, useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Separator } from "@/components/ui/separator"
-import { Heart, Star, ShoppingCart, Share2, Minus, Plus, Truck, Shield, RotateCcw, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react'
-import { cn } from "@/lib/utils"
-import Link from "next/link"
-import ProductGallery from "@/components/items/product-gallery"
-import ProductReviews from "@/components/items/product-reviews"
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
+import {
+  Heart,
+  Star,
+  ShoppingCart,
+  Share2,
+  Minus,
+  Plus,
+  Truck,
+  Shield,
+  RotateCcw,
+  ChevronLeft,
+  ChevronRight,
+  ArrowLeft,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import ProductGallery from "@/components/items/product-gallery";
+import ProductReviews from "@/components/items/product-reviews";
 
-import ProductSkeleton from "@/components/items/product-detail-skeleton"
+import ProductSkeleton from "@/components/items/product-detail-skeleton";
+import { crud } from "@/app/api/apiService";
+import { Product } from "@/types/product";
 
 // Extended mock data with more details
 const allProducts = [
@@ -41,8 +56,8 @@ const allProducts = [
     specifications: {
       "Og'irligi": "100g",
       "Kelib chiqishi": "Yaponiya, Uji",
-      "Turi": "Matcha Sencha",
-      "Organik": "Ha",
+      Turi: "Matcha Sencha",
+      Organik: "Ha",
       "Kafeyin miqdori": "O'rtacha",
       "Saqlash muddati": "2 yil",
     },
@@ -84,7 +99,7 @@ const allProducts = [
     specifications: {
       "Og'irligi": "200g",
       "Kelib chiqishi": "Angliya",
-      "Turi": "Earl Grey",
+      Turi: "Earl Grey",
       "Bergamot moyi": "Ha",
       "Kafeyin miqdori": "Yuqori",
       "Saqlash muddati": "3 yil",
@@ -105,7 +120,7 @@ const allProducts = [
     warranty: "Sifat kafolati",
   },
   // Add more products as needed...
-]
+];
 
 const reviews = [
   {
@@ -113,7 +128,8 @@ const reviews = [
     productId: 1,
     userName: "Aziza Karimova",
     rating: 5,
-    comment: "Juda sifatli choy! Ta'mi ajoyib, aroma ham zo'r. Tavsiya qilaman!",
+    comment:
+      "Juda sifatli choy! Ta'mi ajoyib, aroma ham zo'r. Tavsiya qilaman!",
     date: "2024-01-15",
     verified: true,
   },
@@ -122,7 +138,8 @@ const reviews = [
     productId: 1,
     userName: "Bobur Toshmatov",
     rating: 4,
-    comment: "Yaxshi mahsulot, lekin narxi biroz qimmat. Ammo sifati bunga loyiq.",
+    comment:
+      "Yaxshi mahsulot, lekin narxi biroz qimmat. Ammo sifati bunga loyiq.",
     date: "2024-01-10",
     verified: true,
   },
@@ -135,68 +152,78 @@ const reviews = [
     date: "2024-01-05",
     verified: false,
   },
-]
+];
 
 export default function ProductDetailPage() {
-  const params = useParams()
-  const router = useRouter()
-  const [product, setProduct] = useState<any>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [quantity, setQuantity] = useState(1)
-  const [isFavorite, setIsFavorite] = useState(false)
-  const [selectedImage, setSelectedImage] = useState(0)
-
-  const productId = Number.parseInt(params.id as string)
+  const params = useParams();
+  const router = useRouter();
+  const [product, setProduct] = useState<Product>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [quantity, setQuantity] = useState(1);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
     // Simulate API call
-    const timer = setTimeout(() => {
-      const foundProduct = allProducts.find(p => p.id === productId)
-      setProduct(foundProduct)
-      setIsLoading(false)
-    }, 1000)
 
-    return () => clearTimeout(timer)
-  }, [productId])
+    const fetchProduct = async () => {
+      try {
+        setIsLoading(true);
+        const res = await crud.loadAllById("product", params.id);
+        setProduct(res);
+        setIsLoading(false);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchProduct();
+    
+  }, [params.id]);
 
   if (isLoading) {
-    return <ProductSkeleton />
+    return <ProductSkeleton />;
   }
 
   if (!product) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Mahsulot topilmadi</h1>
-          <p className="text-gray-600 mb-6">Kechirasiz, siz qidirayotgan mahsulot mavjud emas.</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            Mahsulot topilmadi
+          </h1>
+          <p className="text-gray-600 mb-6">
+            Kechirasiz, siz qidirayotgan mahsulot mavjud emas.
+          </p>
           <Button onClick={() => router.push("/products")}>
             <ArrowLeft className="w-4 h-4 mr-2" />
             Mahsulotlarga qaytish
           </Button>
         </div>
       </div>
-    )
+    );
   }
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("uz-UZ").format(price) + " so'm"
-  }
+    return new Intl.NumberFormat("uz-UZ").format(price) + " so'm";
+  };
 
-  const discountPercentage = product.originalPrice
-    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
-    : 0
+  const discountPercentage = product.original_price
+    ? Math.round(
+        ((product.original_price - product.price) / product.original_price) * 100
+      )
+    : 0;
 
   const handleQuantityChange = (change: number) => {
-    const newQuantity = quantity + change
-    if (newQuantity >= 1 && newQuantity <= product.stockCount) {
-      setQuantity(newQuantity)
+    const newQuantity = quantity + change;
+    if (newQuantity >= 1 && newQuantity <= product.stock_count) {
+      setQuantity(newQuantity);
     }
-  }
+  };
 
   const handleAddToCart = () => {
     // Add to cart logic here
-    console.log(`Added ${quantity} of product ${product.id} to cart`)
-  }
+    console.log(`Added ${quantity} of product ${product.id} to cart`);
+  };
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -205,18 +232,18 @@ export default function ProductDetailPage() {
           title: product.title,
           text: product.description,
           url: window.location.href,
-        })
+        });
       } catch (error) {
-        console.log('Error sharing:', error)
+        console.log("Error sharing:", error);
       }
     } else {
       // Fallback: copy to clipboard
-      navigator.clipboard.writeText(window.location.href)
+      navigator.clipboard.writeText(window.location.href);
     }
-  }
+  };
 
-  const productReviews = reviews.filter(review => review.productId === product.id)
-  const relatedProducts = allProducts.filter(p => p.id !== product.id && p.category === product.category).slice(0, 4)
+
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -224,9 +251,13 @@ export default function ProductDetailPage() {
       <div className="bg-white border-b">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <nav className="flex items-center space-x-2 text-sm text-gray-600">
-            <Link href="/" className="hover:text-blue-600">Asosiy</Link>
+            <Link href="/" className="hover:text-blue-600">
+              Asosiy
+            </Link>
             <ChevronRight className="w-4 h-4" />
-            <Link href="/products" className="hover:text-blue-600">Mahsulotlar</Link>
+            <Link href="/products" className="hover:text-blue-600">
+              Mahsulotlar
+            </Link>
             <ChevronRight className="w-4 h-4" />
             <span className="text-gray-900 font-medium">{product.title}</span>
           </nav>
@@ -237,8 +268,8 @@ export default function ProductDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
           {/* Product Gallery */}
           <div className="space-y-4">
-            <ProductGallery 
-              images={product.images} 
+            <ProductGallery
+              images={product.images.map((img) => img.image)}
               productTitle={product.title}
               selectedImage={selectedImage}
               onImageSelect={setSelectedImage}
@@ -252,14 +283,18 @@ export default function ProductDetailPage() {
               <div className="flex items-center gap-2 mb-2">
                 <Badge variant="outline">{product.brand}</Badge>
                 {discountPercentage > 0 && (
-                  <Badge className="bg-red-500 hover:bg-red-600">-{discountPercentage}%</Badge>
+                  <Badge className="bg-red-500 hover:bg-red-600">
+                    -{discountPercentage}%
+                  </Badge>
                 )}
-                {product.stockCount <= 5 && (
+                {product.stock_count <= 5 && (
                   <Badge variant="destructive">Kam qoldi!</Badge>
                 )}
               </div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.title}</h1>
-              
+              <h1 className="text-3xl font-bold text-gray-900 mb-4">
+                {product.title}
+              </h1>
+
               {/* Rating */}
               <div className="flex items-center gap-4 mb-4">
                 <div className="flex items-center gap-1">
@@ -268,46 +303,64 @@ export default function ProductDetailPage() {
                       key={i}
                       className={cn(
                         "w-5 h-5",
-                        i < Math.floor(product.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                        i < Math.floor(product.rating)
+                          ? "fill-yellow-400 text-yellow-400"
+                          : "text-gray-300"
                       )}
                     />
                   ))}
                   <span className="font-medium ml-2">{product.rating}</span>
                 </div>
-                <span className="text-gray-600">({product.reviews} ta sharh)</span>
+                {/* <span className="text-gray-600">
+                  ({product.reviews} ta sharh)
+                </span> */}
               </div>
 
               {/* Price */}
               <div className="flex items-center gap-4 mb-6">
-                <span className="text-4xl font-bold text-green-600">{formatPrice(product.price)}</span>
-                {product.originalPrice && (
-                  <span className="text-2xl text-gray-400 line-through">{formatPrice(product.originalPrice)}</span>
+                <span className="text-4xl font-bold text-green-600">
+                  {formatPrice(product.price)}
+                </span>
+                {product.original_price && (
+                  <span className="text-2xl text-gray-400 line-through">
+                    {formatPrice(product.original_price)}
+                  </span>
                 )}
               </div>
 
               {/* Stock Status */}
               <div className="flex items-center gap-2 mb-6">
-                <div className={cn(
-                  "w-3 h-3 rounded-full",
-                  product.inStock ? "bg-green-500" : "bg-red-500"
-                )} />
-                <span className={cn(
-                  "font-medium",
-                  product.inStock ? "text-green-600" : "text-red-600"
-                )}>
-                  {product.inStock ? `Mavjud (${product.stockCount} ta)` : "Tugagan"}
+                <div
+                  className={cn(
+                    "w-3 h-3 rounded-full",
+                    product.in_stock ? "bg-green-500" : "bg-red-500"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "font-medium",
+                    product.in_stock ? "text-green-600" : "text-red-600"
+                  )}
+                >
+                  {product.in_stock
+                    ? `Mavjud (${product.stock_count} ta)`
+                    : "Tugagan"}
                 </span>
               </div>
             </div>
 
             {/* Description */}
             <div>
-              <p className="text-gray-700 leading-relaxed">{product.description}</p>
+              <p className="text-gray-700 leading-relaxed">
+                {product.description}
+              </p>
             </div>
 
             {/* Features */}
             <div>
-              <h3 className="font-semibold text-lg mb-3">Asosiy xususiyatlar:</h3>
+              <h3 className="font-semibold text-lg mb-3">
+                Asosiy xususiyatlar:
+              </h3>
               <ul className="space-y-2">
                 {product.features.map((feature: string, index: number) => (
                   <li key={index} className="flex items-center gap-2">
@@ -333,12 +386,14 @@ export default function ProductDetailPage() {
                   >
                     <Minus className="w-4 h-4" />
                   </Button>
-                  <span className="px-4 py-2 font-medium min-w-[3rem] text-center">{quantity}</span>
+                  <span className="px-4 py-2 font-medium min-w-[3rem] text-center">
+                    {quantity}
+                  </span>
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={() => handleQuantityChange(1)}
-                    disabled={quantity >= product.stockCount}
+                    disabled={quantity >= product.stock_count}
                     className="h-10 w-10"
                   >
                     <Plus className="w-4 h-4" />
@@ -350,9 +405,9 @@ export default function ProductDetailPage() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button
                   size="lg"
-                  className="flex-1 bg-green-600 hover:bg-green-700 h-12"
+                  className="md:flex-1 bg-green-600 hover:bg-green-700 h-12"
                   onClick={handleAddToCart}
-                  disabled={!product.inStock}
+                  disabled={!product.in_stock}
                 >
                   <ShoppingCart className="w-5 h-5 mr-2" />
                   Savatga qo'shish
@@ -363,7 +418,12 @@ export default function ProductDetailPage() {
                   onClick={() => setIsFavorite(!isFavorite)}
                   className="h-12"
                 >
-                  <Heart className={cn("w-5 h-5", isFavorite && "fill-red-500 text-red-500")} />
+                  <Heart
+                    className={cn(
+                      "w-5 h-5",
+                      isFavorite && "fill-red-500 text-red-500"
+                    )}
+                  />
                 </Button>
                 <Button
                   variant="outline"
@@ -384,10 +444,16 @@ export default function ProductDetailPage() {
                     <Truck className="w-5 h-5 text-green-600" />
                     <div>
                       <p className="font-medium">Yetkazib berish</p>
-                      <p className="text-sm text-gray-600">
-                        {product.shippingInfo.freeShipping ? "Bepul yetkazib berish" : `${formatPrice(product.shippingInfo.shippingCost)} yetkazib berish`}
-                      </p>
-                      <p className="text-sm text-gray-600">{product.shippingInfo.estimatedDays}</p>
+                      {/* <p className="text-sm text-gray-600">
+                        {product.warranty.freeShipping
+                          ? "Bepul yetkazib berish"
+                          : `${formatPrice(
+                              product.shippingInfo.shippingCost
+                            )} yetkazib berish`}
+                      </p> */}
+                      {/* <p className="text-sm text-gray-600">
+                        {product.shippingInfo.estimatedDays}
+                      </p> */}
                     </div>
                   </div>
                   <Separator />
@@ -395,7 +461,9 @@ export default function ProductDetailPage() {
                     <RotateCcw className="w-5 h-5 text-blue-600" />
                     <div>
                       <p className="font-medium">Qaytarish</p>
-                      <p className="text-sm text-gray-600">{product.returnPolicy}</p>
+                      <p className="text-sm text-gray-600">
+                        {product.return_policy}
+                      </p>
                     </div>
                   </div>
                   <Separator />
@@ -403,7 +471,9 @@ export default function ProductDetailPage() {
                     <Shield className="w-5 h-5 text-purple-600" />
                     <div>
                       <p className="font-medium">Kafolat</p>
-                      <p className="text-sm text-gray-600">{product.warranty}</p>
+                      <p className="text-sm text-gray-600">
+                        {product.warranty}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -413,5 +483,5 @@ export default function ProductDetailPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

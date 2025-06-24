@@ -7,12 +7,13 @@ import { Menu, X, Phone } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { OrderModal } from "../modal/contact";
 
 const navLinks = [
   { id: 1, label: "Asosiy", path: "/" },
-  { id: 2, label: "Biz haqimizda", path: "/#" },
+  { id: 2, label: "Biz haqimizda", path: "/about" },
   { id: 3, label: "Mahsulotlar", path: "/products" },
-  { id: 4, label: "Aloqa", path: "/#" },
+  
 ];
 
 export default function Navbar() {
@@ -57,7 +58,7 @@ export default function Navbar() {
             href="/"
             className="flex-shrink-0 text-2xl font-bold text-gray-900 hover:text-green-600 transition-colors duration-200"
           >
-            LOGO
+            <img src="/assets/logo.svg" className="w-12" alt="" />
           </Link>
 
           {/* Desktop Navigation */}
@@ -77,21 +78,24 @@ export default function Navbar() {
               >
                 {link.label}
                 {isActiveLink(link.path) && (
-                  <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-green-600 rounded-full" />
+                  <span className="absolute  bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-green-600 rounded-full" />
                 )}
               </Link>
             ))}
+            <OrderModal buttonText="hover:bg-gray-100 hover:text-green-600 cursor-pointer"/>
           </div>
 
           {/* Desktop CTA Button */}
           <div className="hidden lg:flex items-center">
-            <Button
-              size="lg"
-              className="bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2.5 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-105 "
-            >
-              <Phone className="w-4 h-4 mr-2" />
-              +998 33 225 55 05
-            </Button>
+            <a href="tel:+998332255505">
+              <Button
+                size="lg"
+                className="bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2.5 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-105 "
+              >
+                <Phone className="w-4 h-4 mr-2" />
+                +998 33 225 55 05
+              </Button>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -115,7 +119,7 @@ export default function Navbar() {
                     className="text-xl font-bold text-gray-900"
                     onClick={() => setIsOpen(false)}
                   >
-                    LOGO
+                    <img src="/assets/logo.svg" className="w-12" alt="" />
                   </Link>
                   {/* <Button
                     variant="ghost"
@@ -153,14 +157,16 @@ export default function Navbar() {
 
                 {/* Mobile CTA Button */}
                 <div className="p-6 border-t border-gray-100">
-                  <Button
-                    size="lg"
-                    className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 rounded-lg transition-all duration-200 ease-in-out"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <Phone className="w-4 h-4 mr-2" />
-                    +998 33 225 55 05
-                  </Button>
+                  <a href="tel:+998332255505">
+                    <Button
+                      size="lg"
+                      className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 rounded-lg transition-all duration-200 ease-in-out"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <Phone className="w-4 h-4 mr-2" />
+                      +998 33 225 55 05
+                    </Button>
+                  </a>
                 </div>
               </div>
             </SheetContent>
