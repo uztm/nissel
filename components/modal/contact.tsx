@@ -40,9 +40,10 @@ const uzbekistanRegions = [
 type OrderModalProps = {
   productId?: string;
   buttonText?: string;
+  classStyle?: string;
 };
 
-export function OrderModal({ buttonText }: OrderModalProps) {
+export function OrderModal({ classStyle }: OrderModalProps) {
   const [formData, setFormData] = useState({
     full_name: "",
     phone_number: "+998",
@@ -83,7 +84,7 @@ export function OrderModal({ buttonText }: OrderModalProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className={buttonText} variant={"ghost"}>
+        <Button className={`${classStyle} flex items-center`} variant={"ghost"}>
           Aloqa
         </Button>
       </DialogTrigger>

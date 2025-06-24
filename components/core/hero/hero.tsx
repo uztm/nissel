@@ -33,12 +33,13 @@ export default function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 pt-2">
-          <Link href={"products"}>
-            <Button className="bg-green-700 hover:bg-green-800 text-white">
+          <Link href="/products" className="w-full sm:w-auto">
+            <Button className="w-full sm:w-40 bg-green-700 hover:bg-green-800 text-white">
               Sotib oling
             </Button>
           </Link>
-          <OrderModal />
+
+          <OrderModal classStyle=""  />
         </div>
       </div>
 
