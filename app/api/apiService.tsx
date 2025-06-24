@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const BASE_URL = "http://127.0.0.1:8000";
+export const BASE_URL = "https://app.nisseiorganic.uz";
 
 // --- 1. Axios instance ---
 export const api = axios.create({
