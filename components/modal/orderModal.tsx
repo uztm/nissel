@@ -145,7 +145,7 @@ export function OrderModal({
                 onChange={(e) =>
                   setFormData({ ...formData, region: e.target.value })
                 }
-                placeholder="Masalan: Samarqand"
+                placeholder="Masalan: Toshkent"
                 required
               />
               <datalist id="region-options">
